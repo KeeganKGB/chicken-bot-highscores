@@ -40,12 +40,13 @@
                         <th class="rank-col">Rank</th>
                         <th class="name-col">Username</th>
                         <th class="chickens-col">Chickens Killed</th>
+                        <th class="xp-col">XP Gained</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% if (highscores.length === 0) { %>
                     <tr>
-                        <td colspan="3" class="no-data">No highscores yet. Start botting!</td>
+                        <td colspan="4" class="no-data">No highscores yet. Start botting!</td>
                     </tr>
                     <% } else { %>
                         <% highscores.forEach((score, index) => { %>
@@ -63,6 +64,7 @@
                             </td>
                             <td class="name-col"><%= score.username %></td>
                             <td class="chickens-col"><%= score.chickens_killed.toLocaleString() %></td>
+                            <td class="xp-col"><%= score.xp_gained.toLocaleString() %></td>
                         </tr>
                         <% }); %>
                     <% } %>

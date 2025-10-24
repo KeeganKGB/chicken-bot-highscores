@@ -147,6 +147,11 @@ tr:hover {
     font-family: 'Courier New', monospace;
 }
 
+.xp-col {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+}
+
 .medal {
     font-size: 1.5em;
 }

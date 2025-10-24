@@ -68,6 +68,7 @@ async function getHighscores(limit = 100) {
                         username,
                         account_name,
                         chickens_killed,
+                        xp_gained,
                         created_at,
                         updated_at,
                         ROW_NUMBER() OVER (PARTITION BY username ORDER BY chickens_killed DESC) as rn
@@ -77,6 +78,7 @@ async function getHighscores(limit = 100) {
                     username,
                     account_name,
                     chickens_killed,
+                    xp_gained,
                     created_at,
                     updated_at
                 FROM RankedAccounts
@@ -94,23 +96,25 @@ async function getHighscores(limit = 100) {
     }
 }
 
-async function updateScore(username, accountName, chickensKilled, startingLevel = null) {
+async function updateScore(username, accountName, chickensKilled, xpGained, startingLevel = null) {
     try {
         const pool = await getConnection();
 
         // Check if account exists
         const checkAccount = await pool.request()
             .input('accountName', sql.NVarChar, accountName)
-            .query('SELECT id, chickens_killed FROM Highscores WHERE account_name = @accountName');
+            .query('SELECT id, chickens_killed, xp_gained FROM Highscores WHERE account_name = @accountName');
 
         if (checkAccount.recordset.length > 0) {
-            // Update existing account - ADD to existing total
+            // Update existing account - ADD to existing totals
             const result = await pool.request()
                 .input('accountName', sql.NVarChar, accountName)
                 .input('chickensKilled', sql.Int, chickensKilled)
+                .input('xpGained', sql.Int, xpGained)
                 .query(`
                     UPDATE Highscores
                     SET chickens_killed = chickens_killed + @chickensKilled,
+                        xp_gained = xp_gained + @xpGained,
                         updated_at = GETDATE()
                     WHERE account_name = @accountName
                 `);
@@ -121,10 +125,11 @@ async function updateScore(username, accountName, chickensKilled, startingLevel 
                 .input('username', sql.NVarChar, username)
                 .input('accountName', sql.NVarChar, accountName)
                 .input('chickensKilled', sql.Int, chickensKilled)
+                .input('xpGained', sql.Int, xpGained)
                 .input('startingLevel', sql.Int, startingLevel)
                 .query(`
-                    INSERT INTO Highscores (username, account_name, chickens_killed, starting_level)
-                    VALUES (@username, @accountName, @chickensKilled, @startingLevel)
+                    INSERT INTO Highscores (username, account_name, chickens_killed, xp_gained, starting_level)
+                    VALUES (@username, @accountName, @chickensKilled, @xpGained, @startingLevel)
                 `);
             return { created: true, username, accountName };
         }

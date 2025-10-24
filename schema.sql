@@ -14,6 +14,7 @@ CREATE TABLE Highscores (
     username NVARCHAR(50) NOT NULL,
     account_name NVARCHAR(50) NOT NULL,
     chickens_killed INT NOT NULL DEFAULT 0,
+    xp_gained INT NOT NULL DEFAULT 0,
     starting_level INT NULL,
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME DEFAULT GETDATE(),
@@ -27,10 +28,10 @@ CREATE INDEX idx_username ON Highscores(username);
 GO
 
 -- Sample data for testing (optional - comment out if not needed)
-INSERT INTO Highscores (username, account_name, chickens_killed, starting_level) VALUES
-('Player1', 'ChickenSlayer99', 15420, 3),
-('Player1', 'AltAccount1', 5000, 10),
-('Player2', 'BokBokDestroyer', 12350, 15),
-('Player3', 'FeatherHunter', 11200, 8),
-('Player4', 'CluckConqueror', 9870, 20);
+INSERT INTO Highscores (username, account_name, chickens_killed, xp_gained, starting_level) VALUES
+('Player1', 'ChickenSlayer99', 15420, 1234560, 3),
+('Player1', 'AltAccount1', 5000, 400000, 10),
+('Player2', 'BokBokDestroyer', 12350, 988000, 15),
+('Player3', 'FeatherHunter', 11200, 896000, 8),
+('Player4', 'CluckConqueror', 9870, 789600, 20);
 GO

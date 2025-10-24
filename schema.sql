@@ -1,18 +1,18 @@
 -- Database schema for Chicken Kicker Highscores
--- Run this script on your Microsoft SQL Server to create the required table
+-- Run this script on your Microsoft SQL Server to create the required database and table
 
-CREATE DATABASE ChickenKickerDB;
+-- Create the database
+CREATE DATABASE ChickenBotDB;
 GO
 
-USE ChickenKickerDB;
+USE ChickenBotDB;
 GO
 
+-- Create the Highscores table
 CREATE TABLE Highscores (
     id INT IDENTITY(1,1) PRIMARY KEY,
     username NVARCHAR(50) NOT NULL UNIQUE,
     chickens_killed INT NOT NULL DEFAULT 0,
-    total_xp BIGINT NOT NULL DEFAULT 0,
-    level INT NOT NULL DEFAULT 1,
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME DEFAULT GETDATE()
 );
@@ -22,11 +22,11 @@ GO
 CREATE INDEX idx_chickens_killed ON Highscores(chickens_killed DESC);
 GO
 
--- Sample data for testing
-INSERT INTO Highscores (username, chickens_killed, total_xp, level) VALUES
-('Zezima', 10000, 500000, 99),
-('Woox', 8500, 425000, 95),
-('ChickenSlayer', 7200, 360000, 92),
-('BotMaster', 5000, 250000, 85),
-('Noob123', 1000, 50000, 60);
+-- Sample data for testing (optional - comment out if not needed)
+INSERT INTO Highscores (username, chickens_killed) VALUES
+('ChickenSlayer99', 15420),
+('BokBokDestroyer', 12350),
+('FeatherHunter', 11200),
+('CluckConqueror', 9870),
+('EggTerminator', 8940);
 GO

@@ -77,13 +77,13 @@ app.get('/api/user/:username', async (req, res) => {
 // API endpoint - Update/Create score
 app.post('/api/update', async (req, res) => {
     try {
-        const { username, chickensKilled } = req.body;
+        const { username, accountName, chickensKilled, startingLevel } = req.body;
 
         // Validation
-        if (!username || chickensKilled === undefined) {
+        if (!username || !accountName || chickensKilled === undefined) {
             return res.status(400).json({
                 success: false,
-                error: 'Missing required fields: username, chickensKilled'
+                error: 'Missing required fields: username, accountName, chickensKilled'
             });
         }
 
@@ -94,7 +94,14 @@ app.post('/api/update', async (req, res) => {
             });
         }
 
-        const result = await db.updateScore(username, chickensKilled);
+        if (startingLevel !== undefined && startingLevel !== null && (typeof startingLevel !== 'number' || startingLevel < 3 || startingLevel > 126)) {
+            return res.status(400).json({
+                success: false,
+                error: 'startingLevel must be a number between 3 and 126'
+            });
+        }
+
+        const result = await db.updateScore(username, accountName, chickensKilled, startingLevel);
         res.json({
             success: true,
             data: result

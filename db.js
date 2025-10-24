@@ -62,7 +62,27 @@ async function getHighscores(limit = 100) {
         const pool = await getConnection();
         const result = await pool.request()
             .input('limit', sql.Int, limit)
-            .query('SELECT TOP (@limit) id, username, chickens_killed, created_at, updated_at FROM Highscores ORDER BY chickens_killed DESC');
+            .query(`
+                WITH RankedAccounts AS (
+                    SELECT
+                        username,
+                        account_name,
+                        chickens_killed,
+                        created_at,
+                        updated_at,
+                        ROW_NUMBER() OVER (PARTITION BY username ORDER BY chickens_killed DESC) as rn
+                    FROM Highscores
+                )
+                SELECT TOP (@limit)
+                    username,
+                    account_name,
+                    chickens_killed,
+                    created_at,
+                    updated_at
+                FROM RankedAccounts
+                WHERE rn = 1
+                ORDER BY chickens_killed DESC
+            `);
         return result.recordset;
     } catch (err) {
         console.error('Error fetching highscores:', err);
@@ -74,37 +94,39 @@ async function getHighscores(limit = 100) {
     }
 }
 
-async function updateScore(username, chickensKilled) {
+async function updateScore(username, accountName, chickensKilled, startingLevel = null) {
     try {
         const pool = await getConnection();
 
-        // Check if user exists
-        const checkUser = await pool.request()
-            .input('username', sql.NVarChar, username)
-            .query('SELECT id, chickens_killed FROM Highscores WHERE username = @username');
+        // Check if account exists
+        const checkAccount = await pool.request()
+            .input('accountName', sql.NVarChar, accountName)
+            .query('SELECT id, chickens_killed FROM Highscores WHERE account_name = @accountName');
 
-        if (checkUser.recordset.length > 0) {
-            // Update existing user - ADD to existing total
+        if (checkAccount.recordset.length > 0) {
+            // Update existing account - ADD to existing total
             const result = await pool.request()
-                .input('username', sql.NVarChar, username)
+                .input('accountName', sql.NVarChar, accountName)
                 .input('chickensKilled', sql.Int, chickensKilled)
                 .query(`
                     UPDATE Highscores
                     SET chickens_killed = chickens_killed + @chickensKilled,
                         updated_at = GETDATE()
-                    WHERE username = @username
+                    WHERE account_name = @accountName
                 `);
-            return { updated: true, username };
+            return { updated: true, username, accountName };
         } else {
-            // Insert new user
+            // Insert new account
             const result = await pool.request()
                 .input('username', sql.NVarChar, username)
+                .input('accountName', sql.NVarChar, accountName)
                 .input('chickensKilled', sql.Int, chickensKilled)
+                .input('startingLevel', sql.Int, startingLevel)
                 .query(`
-                    INSERT INTO Highscores (username, chickens_killed)
-                    VALUES (@username, @chickensKilled)
+                    INSERT INTO Highscores (username, account_name, chickens_killed, starting_level)
+                    VALUES (@username, @accountName, @chickensKilled, @startingLevel)
                 `);
-            return { created: true, username };
+            return { created: true, username, accountName };
         }
     } catch (err) {
         console.error('Error updating score:', err);

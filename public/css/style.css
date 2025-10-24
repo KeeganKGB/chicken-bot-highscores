@@ -1,0 +1,263 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000000;
+    min-height: 100vh;
+    padding: 20px;
+    color: #FFE135;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #000000;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(109, 40, 217, 0.5);
+    overflow: hidden;
+}
+
+header {
+    background: #000000;
+    color: #FFE135;
+    padding: 40px 20px;
+    text-align: center;
+    border-bottom: 2px solid #6d28d9;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.chicken-left,
+.chicken-right {
+    width: 120px;
+    height: auto;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.chicken-left {
+    transform: scaleX(-1);
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #FFE135;
+    opacity: 0.8;
+}
+
+.stats-overview {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px 20px;
+    background: #0a0a0a;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(109, 40, 217, 0.3);
+    border: 1px solid #6d28d9;
+    min-width: 150px;
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 2em;
+    font-weight: bold;
+    color: #FFE135;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #FFE135;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.highscores-table {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #000000;
+}
+
+thead {
+    background: #000000;
+    color: #FFE135;
+    border-bottom: 2px solid #6d28d9;
+}
+
+th {
+    padding: 15px 10px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+}
+
+td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #2a2a2a;
+    color: #FFE135;
+}
+
+tr:hover {
+    background: #1a1a1a;
+}
+
+.rank-col {
+    width: 80px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.name-col {
+    width: 200px;
+    font-weight: 600;
+    color: #FFE135;
+}
+
+.chickens-col {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+}
+
+.medal {
+    font-size: 1.5em;
+}
+
+.top-1 {
+    background: linear-gradient(90deg, rgba(255, 225, 53, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.top-2 {
+    background: linear-gradient(90deg, rgba(192, 192, 192, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.top-3 {
+    background: linear-gradient(90deg, rgba(205, 127, 50, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px !important;
+    color: #FFE135;
+    font-style: italic;
+    opacity: 0.6;
+}
+
+footer {
+    background: #000000;
+    padding: 30px 20px;
+    text-align: center;
+    color: #FFE135;
+    border-top: 2px solid #6d28d9;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+.api-info {
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.api-info a {
+    color: #FFE135;
+    text-decoration: none;
+}
+
+.api-info a:hover {
+    text-decoration: underline;
+}
+
+/* Error page styles */
+.error-container {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.error-container h2 {
+    color: #FFE135;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.error-container p {
+    color: #FFE135;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    opacity: 0.8;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #000000;
+    color: #FFE135;
+    text-decoration: none;
+    border-radius: 25px;
+    border: 2px solid #6d28d9;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    background: #6d28d9;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.6);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    .header-content {
+        gap: 15px;
+    }
+
+    .chicken-left,
+    .chicken-right {
+        width: 80px;
+    }
+
+    .stats-overview {
+        flex-direction: column;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+
+    th, td {
+        padding: 10px 5px;
+    }
+}

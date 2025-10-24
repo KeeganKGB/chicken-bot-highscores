@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicken Kicker Highscores - keegan.bot</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="/images/chicken1.png" alt="Chicken" class="chicken-left">
+                <h1>Chicken Kicker Highscores</h1>
+                <img src="/images/chicken2.png" alt="Chicken" class="chicken-right">
+            </div>
+        </header>
+
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-number"><%= highscores.length %></div>
+                <div class="stat-label">Total Kickers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><%= highscores.reduce((sum, h) => sum + h.chickens_killed, 0).toLocaleString() %></div>
+                <div class="stat-label">Total Chickens Killed</div>
+            </div>
+            <% if (highscores.length > 0) { %>
+            <div class="stat-card">
+                <div class="stat-number"><%= highscores[0].chickens_killed.toLocaleString() %></div>
+                <div class="stat-label">Top Score</div>
+            </div>
+            <% } %>
+        </div>
+
+        <div class="highscores-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="rank-col">Rank</th>
+                        <th class="name-col">Username</th>
+                        <th class="chickens-col">Chickens Killed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (highscores.length === 0) { %>
+                    <tr>
+                        <td colspan="3" class="no-data">No highscores yet. Start botting!</td>
+                    </tr>
+                    <% } else { %>
+                        <% highscores.forEach((score, index) => { %>
+                        <tr class="<%= index < 3 ? 'top-' + (index + 1) : '' %>">
+                            <td class="rank-col">
+                                <% if (index === 0) { %>
+                                    <span class="medal gold">🥇</span>
+                                <% } else if (index === 1) { %>
+                                    <span class="medal silver">🥈</span>
+                                <% } else if (index === 2) { %>
+                                    <span class="medal bronze">🥉</span>
+                                <% } else { %>
+                                    #<%= index + 1 %>
+                                <% } %>
+                            </td>
+                            <td class="name-col"><%= score.username %></td>
+                            <td class="chickens-col"><%= score.chickens_killed.toLocaleString() %></td>
+                        </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh every 30 seconds
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>

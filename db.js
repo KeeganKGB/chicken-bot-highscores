@@ -84,13 +84,13 @@ async function updateScore(username, chickensKilled) {
             .query('SELECT id, chickens_killed FROM Highscores WHERE username = @username');
 
         if (checkUser.recordset.length > 0) {
-            // Update existing user
+            // Update existing user - ADD to existing total
             const result = await pool.request()
                 .input('username', sql.NVarChar, username)
                 .input('chickensKilled', sql.Int, chickensKilled)
                 .query(`
                     UPDATE Highscores
-                    SET chickens_killed = @chickensKilled,
+                    SET chickens_killed = chickens_killed + @chickensKilled,
                         updated_at = GETDATE()
                     WHERE username = @username
                 `);

@@ -6,6 +6,11 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Cache for highscores
+let cachedHighscores = null;
+let cacheTime = 0;
+const CACHE_DURATION = 60000; // 1 minute in milliseconds
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,8 +23,15 @@ app.set('views', path.join(__dirname, 'views'));
 // Home page - Display highscores
 app.get('/', async (req, res) => {
     try {
-        const highscores = await db.getHighscores(100);
-        res.render('index', { highscores });
+        // Check if cache is valid
+        if (!cachedHighscores || Date.now() - cacheTime > CACHE_DURATION) {
+            cachedHighscores = await db.getHighscores(100);
+            cacheTime = Date.now();
+            console.log('Cache refreshed');
+        } else {
+            console.log('Serving from cache');
+        }
+        res.render('index', { highscores: cachedHighscores });
     } catch (err) {
         console.error('Error loading highscores:', err);
         res.status(500).render('error', {
